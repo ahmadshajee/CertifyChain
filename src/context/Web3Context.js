@@ -162,6 +162,7 @@ export const Web3Provider = ({ children }) => {
     formatAddress,
     getNetworkName,
     isMetaMaskInstalled: isMetaMaskInstalled(),
+    provider: typeof window !== 'undefined' ? window.ethereum : null,
   };
 
   return (
