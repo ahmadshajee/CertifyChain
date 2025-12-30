@@ -42,7 +42,7 @@ const About = () => {
               <span className="text-gradient"> Verification</span>
             </h1>
             <p>
-              CertifyChain is a blockchain-based platform designed to eliminate credential 
+              AccredChain is a blockchain-based platform designed to eliminate credential 
               fraud and streamline the verification process for academic institutions, 
               students, and employers worldwide.
             </p>
@@ -125,7 +125,7 @@ const About = () => {
               </ul>
             </div>
             <div className="comparison-card solution">
-              <h3>✓ CertifyChain Solution</h3>
+              <h3>✓ AccredChain Solution</h3>
               <ul>
                 <li>Instant blockchain verification</li>
                 <li>Tamper-proof credentials</li>

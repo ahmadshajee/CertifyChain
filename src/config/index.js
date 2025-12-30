@@ -13,9 +13,9 @@ export const IPFS_CONFIG = {
 
 // App Configuration
 export const APP_CONFIG = {
-  APP_NAME: 'CertifyChain',
+  APP_NAME: 'AccredChain',
   APP_VERSION: '1.0.0',
-  SUPPORT_EMAIL: 'support@certifychain.io',
+  SUPPORT_EMAIL: 'support@AccredChain.io',
 };
 
 export default { API_CONFIG, IPFS_CONFIG, APP_CONFIG };

@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  console.log("🚀 Starting CertifyChain deployment...\n");
+  console.log("🚀 Starting AccredChain deployment...\n");
 
   const [deployer] = await hre.ethers.getSigners();
   console.log("📍 Deploying contracts with account:", deployer.address);

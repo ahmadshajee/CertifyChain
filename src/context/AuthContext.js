@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const { nonce } = nonceResult.data;
-      const message = `Sign this message to authenticate with CertifyChain.\n\nNonce: ${nonce}`;
+      const message = `Sign this message to authenticate with AccredChain.\n\nNonce: ${nonce}`;
 
       // Sign message with wallet
       const signature = await signMessage(message);

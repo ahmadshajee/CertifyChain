@@ -206,7 +206,7 @@ router.post('/wallet/verify', [
     const address = walletAddress.toLowerCase();
 
     // Verify signature
-    const message = `Sign this message to authenticate with CertifyChain.\n\nNonce: ${nonce}`;
+    const message = `Sign this message to authenticate with AccredChain.\n\nNonce: ${nonce}`;
     
     try {
       const recoveredAddress = ethers.verifyMessage(message, signature);

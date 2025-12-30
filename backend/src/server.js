@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'development') {
 app.get('/health', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'CertifyChain API is running',
+    message: 'AccredChain API is running',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
   });
@@ -75,7 +75,7 @@ app.use(errorHandler);
 // Database connection
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/certifychain');
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/AccredChain');
     logger.info(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     logger.error('MongoDB connection error:', error.message);

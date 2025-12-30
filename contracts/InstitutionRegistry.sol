@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /**
  * @title InstitutionRegistry
  * @dev Registry for managing educational institutions
- * @author CertifyChain Team
+ * @author AccredChain Team
  */
 contract InstitutionRegistry is Ownable {
     uint256 private _institutionIdCounter;

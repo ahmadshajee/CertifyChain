@@ -108,7 +108,7 @@ const LandingPage = () => {
             </h1>
             
             <p className="hero-description">
-              CertifyChain revolutionizes credential verification with blockchain technology. 
+              AccredChain revolutionizes credential verification with blockchain technology. 
               Issue tamper-proof certificates, empower students with ownership, 
               and enable instant verification for employers worldwide.
             </p>
@@ -200,7 +200,7 @@ const LandingPage = () => {
       <section className="features-section section">
         <div className="container">
           <div className="section-header">
-            <span className="section-tag">Why CertifyChain?</span>
+            <span className="section-tag">Why AccredChain?</span>
             <h2>Built for Trust, <span className="text-gradient">Designed for Speed</span></h2>
             <p>Our blockchain-powered platform eliminates credential fraud and streamlines verification.</p>
           </div>
@@ -245,7 +245,7 @@ const LandingPage = () => {
           <div className="section-header">
             <span className="section-tag">Use Cases</span>
             <h2>Who Can <span className="text-gradient">Benefit?</span></h2>
-            <p>CertifyChain serves institutions, students, and employers alike.</p>
+            <p>AccredChain serves institutions, students, and employers alike.</p>
           </div>
 
           <div className="use-cases-grid">

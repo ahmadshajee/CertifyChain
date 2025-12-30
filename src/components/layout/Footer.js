@@ -26,7 +26,7 @@ const Footer = () => {
               <div className="logo-icon">
                 <HiOutlineAcademicCap />
               </div>
-              <span>CertifyChain</span>
+              <span>AccredChain</span>
             </Link>
             <p className="footer-description">
               Revolutionizing academic credential verification through blockchain technology. 
@@ -75,7 +75,7 @@ const Footer = () => {
             <ul className="contact-list">
               <li>
                 <HiOutlineMail />
-                <span>support@certifychain.io</span>
+                <span>support@AccredChain.io</span>
               </li>
               <li>
                 <HiOutlineLocationMarker />
@@ -87,7 +87,7 @@ const Footer = () => {
 
         {/* Footer Bottom */}
         <div className="footer-bottom">
-          <p>&copy; {currentYear} CertifyChain. All rights reserved.</p>
+          <p>&copy; {currentYear} AccredChain. All rights reserved.</p>
           <div className="footer-bottom-links">
             <Link to="/privacy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>

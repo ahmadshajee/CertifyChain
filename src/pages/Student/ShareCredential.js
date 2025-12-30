@@ -43,7 +43,7 @@ const ShareCredential = () => {
     studentName: 'John Doe'
   };
 
-  const shareLink = `https://certifychain.io/verify/${credential.hash}`;
+  const shareLink = `https://accredchain.io/verify/${credential.hash}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareLink);

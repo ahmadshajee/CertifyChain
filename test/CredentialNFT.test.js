@@ -18,7 +18,7 @@ describe("CredentialNFT", function () {
 
   describe("Deployment", function () {
     it("Should set the correct name and symbol", async function () {
-      expect(await credentialNFT.name()).to.equal("CertifyChain Credential");
+      expect(await credentialNFT.name()).to.equal("AccredChain Credential");
       expect(await credentialNFT.symbol()).to.equal("CERT");
     });
 

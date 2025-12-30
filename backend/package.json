@@ -1,7 +1,7 @@
 {
-  "name": "certifychain-backend",
+  "name": "AccredChain-backend",
   "version": "1.0.0",
-  "description": "Backend API for CertifyChain - Blockchain Credential Verification System",
+  "description": "Backend API for AccredChain - Blockchain Credential Verification System",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -16,7 +16,7 @@
     "nft",
     "ethereum"
   ],
-  "author": "CertifyChain Team",
+  "author": "AccredChain Team",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "D:\\Major Project\\ver 1\\contracts\\CredentialNFT.sol": {
-      "lastModificationDate": 1767078984660,
-      "contentHash": "e34a75903abb4a0772e88afb67653c6e",
+      "lastModificationDate": 1767081984988,
+      "contentHash": "75f51542ff3e8f736a3a78027fbb6f60",
       "sourceName": "contracts/CredentialNFT.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -841,8 +841,8 @@
       ]
     },
     "D:\\Major Project\\ver 1\\contracts\\InstitutionRegistry.sol": {
-      "lastModificationDate": 1767078979888,
-      "contentHash": "c61bde5fc4d808a3f11b9a5f66baf2af",
+      "lastModificationDate": 1767081984991,
+      "contentHash": "cf1ffab82320dcd3a5f6cf0655a2db89",
       "sourceName": "contracts/InstitutionRegistry.sol",
       "solcConfig": {
         "version": "0.8.20",

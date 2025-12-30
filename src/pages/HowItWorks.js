@@ -77,8 +77,8 @@ const HowItWorks = () => {
 
   const faqs = [
     {
-      question: 'What blockchain does CertifyChain use?',
-      answer: 'CertifyChain is built on Ethereum, utilizing smart contracts for secure credential management. We also support Layer 2 solutions for reduced gas costs.'
+      question: 'What blockchain does AccredChain use?',
+      answer: 'AccredChain is built on Ethereum, utilizing smart contracts for secure credential management. We also support Layer 2 solutions for reduced gas costs.'
     },
     {
       question: 'How much does it cost to issue a credential?',
@@ -114,7 +114,7 @@ const HowItWorks = () => {
               <span className="text-gradient"> Decentralized</span>
             </h1>
             <p>
-              Learn how CertifyChain leverages blockchain technology to make 
+              Learn how AccredChain leverages blockchain technology to make 
               credential verification instant, tamper-proof, and accessible worldwide.
             </p>
           </div>
@@ -267,7 +267,7 @@ const HowItWorks = () => {
         <div className="container">
           <div className="cta-box gradient">
             <h2>Ready to experience the future of credentials?</h2>
-            <p>Get started with CertifyChain today</p>
+            <p>Get started with AccredChain today</p>
             <div className="cta-buttons">
               <Link to="/institution" className="btn btn-primary btn-lg">
                 Get Started <HiOutlineArrowRight />

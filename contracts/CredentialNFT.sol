@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 /**
  * @title CredentialNFT
  * @dev ERC721 token representing academic credentials on the blockchain
- * @author CertifyChain Team
+ * @author AccredChain Team
  */
 contract CredentialNFT is ERC721, ERC721URIStorage, AccessControl {
     // Roles
@@ -78,7 +78,7 @@ contract CredentialNFT is ERC721, ERC721URIStorage, AccessControl {
         _;
     }
 
-    constructor() ERC721("CertifyChain Credential", "CERT") {
+    constructor() ERC721("AccredChain Credential", "CERT") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(ADMIN_ROLE, msg.sender);
     }

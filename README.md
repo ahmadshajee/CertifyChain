@@ -1,7 +1,7 @@
-# 🎓 CertifyChain - Blockchain Credential Verification System
+# 🎓 AccredChain - Blockchain Credential Verification System
 
 <p align="center">
-  <img src="public/logo.png" alt="CertifyChain Logo" width="200"/>
+  <img src="public/logo.png" alt="AccredChain Logo" width="200"/>
 </p>
 
 <p align="center">
@@ -21,7 +21,7 @@
 
 ## 📋 Overview
 
-CertifyChain is a decentralized application (dApp) that revolutionizes academic credential verification using blockchain technology. Educational institutions can issue tamper-proof digital certificates as NFTs, students can securely share their credentials, and employers/verifiers can instantly authenticate certificates without intermediaries.
+AccredChain is a decentralized application (dApp) that revolutionizes academic credential verification using blockchain technology. Educational institutions can issue tamper-proof digital certificates as NFTs, students can securely share their credentials, and employers/verifiers can instantly authenticate certificates without intermediaries.
 
 ## ✨ Features
 
@@ -56,7 +56,7 @@ CertifyChain is a decentralized application (dApp) that revolutionizes academic 
 ## 📁 Project Structure
 
 ```
-certifychain/
+AccredChain/
 ├── contracts/                 # Solidity smart contracts
 │   ├── CredentialNFT.sol     # ERC-721 credential NFT
 │   └── InstitutionRegistry.sol # Institution management
@@ -90,8 +90,8 @@ certifychain/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/ahmadshajee/CertifyChain.git
-cd CertifyChain
+git clone https://github.com/ahmadshajee/AccredChain.git
+cd AccredChain
 ```
 
 ### 2. Install Dependencies
