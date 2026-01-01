@@ -266,11 +266,11 @@ const HowItWorks = () => {
       <section className="hiw-cta section">
         <div className="container">
           <div className="cta-box gradient">
-            <h2>Ready to experience the future of credentials?</h2>
-            <p>Get started with AccredChain today</p>
+            <h2>Explore Our Research Project</h2>
+            <p>Try the AccredChain demo and see blockchain credentials in action</p>
             <div className="cta-buttons">
               <Link to="/institution" className="btn btn-primary btn-lg">
-                Get Started <HiOutlineArrowRight />
+                Try Demo <HiOutlineArrowRight />
               </Link>
               <Link to="/about" className="btn btn-secondary btn-lg">
                 Learn More

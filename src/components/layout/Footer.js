@@ -21,7 +21,7 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-grid">
           {/* Brand Section */}
-          <div className="footer-brand">
+          <div className="footer-section">
             <Link to="/" className="footer-logo">
               <div className="logo-icon">
                 <HiOutlineAcademicCap />
@@ -29,23 +29,9 @@ const Footer = () => {
               <span>AccredChain</span>
             </Link>
             <p className="footer-description">
-              Revolutionizing academic credential verification through blockchain technology. 
+              A research project exploring blockchain-based academic credential verification. 
               Secure, transparent, and immutable.
             </p>
-            <div className="footer-social">
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                <FaTwitter />
-              </a>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                <FaGithub />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                <FaLinkedin />
-              </a>
-              <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                <FaDiscord />
-              </a>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -68,29 +54,24 @@ const Footer = () => {
               <li><Link to="/verify">Verifier Portal</Link></li>
             </ul>
           </div>
-
-          {/* Contact */}
-          <div className="footer-section">
-            <h4>Contact</h4>
-            <ul className="contact-list">
-              <li>
-                <HiOutlineMail />
-                <span>support@AccredChain.io</span>
-              </li>
-              <li>
-                <HiOutlineLocationMarker />
-                <span>University Campus, India</span>
-              </li>
-            </ul>
-          </div>
         </div>
 
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <p>&copy; {currentYear} AccredChain. All rights reserved.</p>
-          <div className="footer-bottom-links">
-            <Link to="/privacy">Privacy Policy</Link>
-            <Link to="/terms">Terms of Service</Link>
+          <div className="footer-social">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaTwitter />
+            </a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaGithub />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaLinkedin />
+            </a>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaDiscord />
+            </a>
           </div>
         </div>
       </div>

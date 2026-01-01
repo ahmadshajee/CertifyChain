@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWeb3 } from '../../context/Web3Context';
+import { toast } from 'react-toastify';
 import { 
   HiOutlineDocumentAdd,
   HiOutlineCollection,
@@ -10,14 +11,21 @@ import {
   HiOutlineDotsVertical,
   HiOutlineEye,
   HiOutlineTrash,
-  HiOutlineDownload
+  HiOutlineDownload,
+  HiOutlineRefresh
 } from 'react-icons/hi';
 import './Institution.css';
 
 const ManageCredentials = () => {
+  // Test mode - bypass MetaMask requirement
+  const testMode = true;
+  
   const { isConnected, account, formatAddress } = useWeb3();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [credentials, setCredentials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [institutionInfo, setInstitutionInfo] = useState(null);
 
   const sidebarLinks = [
     { path: '/institution', icon: <HiOutlineHome />, label: 'Dashboard' },
@@ -25,26 +33,115 @@ const ManageCredentials = () => {
     { path: '/institution/manage', icon: <HiOutlineCollection />, label: 'Manage Credentials' },
   ];
 
-  const credentials = [
-    { id: 1, hash: '0x7f8a...3d2e', student: 'John Doe', wallet: '0x1234...5678', type: 'B.Tech Certificate', course: 'Computer Science', date: '2024-01-15', status: 'active', verifications: 45 },
-    { id: 2, hash: '0x9c4b...7a1f', student: 'Jane Smith', wallet: '0x2345...6789', type: 'M.Tech Certificate', course: 'Data Science', date: '2024-01-14', status: 'active', verifications: 32 },
-    { id: 3, hash: '0x3e5d...8b2c', student: 'Mike Johnson', wallet: '0x3456...7890', type: 'Transcript', course: 'Electronics', date: '2024-01-13', status: 'active', verifications: 18 },
-    { id: 4, hash: '0x6f2a...4c9d', student: 'Sarah Wilson', wallet: '0x4567...8901', type: 'B.Tech Certificate', course: 'Mechanical', date: '2024-01-12', status: 'revoked', verifications: 67 },
-    { id: 5, hash: '0x1d8e...5f3a', student: 'Tom Brown', wallet: '0x5678...9012', type: 'Course Completion', course: 'Machine Learning', date: '2024-01-11', status: 'active', verifications: 23 },
-    { id: 6, hash: '0x4c7f...2e8b', student: 'Emily Davis', wallet: '0x6789...0123', type: 'PhD Certificate', course: 'Physics', date: '2024-01-10', status: 'active', verifications: 89 },
-    { id: 7, hash: '0x8a3d...6c1e', student: 'Chris Lee', wallet: '0x7890...1234', type: 'Diploma', course: 'Web Development', date: '2024-01-09', status: 'expired', verifications: 12 },
-    { id: 8, hash: '0x2b9e...7d4f', student: 'Anna Martinez', wallet: '0x8901...2345', type: 'Certificate', course: 'Cloud Computing', date: '2024-01-08', status: 'active', verifications: 56 },
-  ];
+  // Load institution info from localStorage
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        setInstitutionInfo(JSON.parse(user));
+      } catch (e) {
+        console.error('Error parsing user info:', e);
+      }
+    }
+  }, []);
+
+  // Fetch credentials from JSON API
+  const fetchCredentials = async () => {
+    setLoading(true);
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const response = await fetch(`http://localhost:5000/api/credentials-json/institution/${encodeURIComponent(user.email)}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setCredentials(data.credentials || []);
+      } else {
+        console.error('Failed to fetch credentials');
+        setCredentials([]);
+      }
+    } catch (error) {
+      console.error('Error fetching credentials:', error);
+      setCredentials([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCredentials();
+  }, []);
+
+  // Revoke a credential
+  const handleRevoke = async (tokenId) => {
+    if (!window.confirm('Are you sure you want to revoke this credential? This action cannot be undone.')) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`http://localhost:5000/api/credentials-json/${tokenId}/revoke`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ reason: 'Revoked by institution' })
+      });
+      
+      if (response.ok) {
+        toast.success('Credential revoked successfully');
+        fetchCredentials();
+      } else {
+        const data = await response.json();
+        toast.error(data.message || 'Failed to revoke credential');
+      }
+    } catch (error) {
+      console.error('Error revoking credential:', error);
+      toast.error('Failed to revoke credential');
+    }
+  };
+
+  // Delete a credential
+  const handleDelete = async (tokenId) => {
+    if (!window.confirm('Are you sure you want to permanently delete this credential?')) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`http://localhost:5000/api/credentials-json/${tokenId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.ok) {
+        toast.success('Credential deleted successfully');
+        fetchCredentials();
+      } else {
+        const data = await response.json();
+        toast.error(data.message || 'Failed to delete credential');
+      }
+    } catch (error) {
+      console.error('Error deleting credential:', error);
+      toast.error('Failed to delete credential');
+    }
+  };
 
   const filteredCredentials = credentials.filter(cred => {
-    const matchesSearch = cred.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         cred.hash.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         cred.type.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = 
+      (cred.studentName?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (cred.tokenId?.toString() || '').includes(searchTerm.toLowerCase()) ||
+      (cred.credentialType?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (cred.courseName?.toLowerCase() || '').includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || cred.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
 
-  if (!isConnected) {
+  if (!testMode && !isConnected) {
     return (
       <div className="connect-prompt">
         <div className="connect-card">
@@ -67,8 +164,8 @@ const ManageCredentials = () => {
           <div className="institution-info">
             <div className="institution-avatar">🏛️</div>
             <div>
-              <h3>Institution Portal</h3>
-              <p className="wallet-address">{formatAddress(account)}</p>
+              <h3>{institutionInfo?.name || institutionInfo?.institutionName || 'Institution Portal'}</h3>
+              <p className="wallet-address">{institutionInfo?.email || (testMode ? 'Test Mode' : formatAddress(account))}</p>
             </div>
           </div>
         </div>
@@ -94,10 +191,16 @@ const ManageCredentials = () => {
             <h1>Manage Credentials</h1>
             <p>View and manage all issued credentials</p>
           </div>
-          <Link to="/institution/issue" className="btn btn-primary">
-            <HiOutlineDocumentAdd />
-            Issue New
-          </Link>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button onClick={fetchCredentials} className="btn btn-secondary">
+              <HiOutlineRefresh />
+              Refresh
+            </button>
+            <Link to="/institution/issue" className="btn btn-primary">
+              <HiOutlineDocumentAdd />
+              Issue New
+            </Link>
+          </div>
         </div>
 
         {/* Filters */}
@@ -106,7 +209,7 @@ const ManageCredentials = () => {
             <HiOutlineSearch className="search-icon" />
             <input
               type="text"
-              placeholder="Search by student name, hash, or type..."
+              placeholder="Search by student name, token ID, or type..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
@@ -133,89 +236,105 @@ const ManageCredentials = () => {
           </button>
         </div>
 
-        {/* Credentials Table */}
-        <div className="table-container">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Credential Hash</th>
-                <th>Student</th>
-                <th>Type</th>
-                <th>Course</th>
-                <th>Issue Date</th>
-                <th>Status</th>
-                <th>Verifications</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCredentials.map((cred) => (
-                <tr key={cred.id}>
-                  <td>
-                    <code className="hash-code">{cred.hash}</code>
-                  </td>
-                  <td>
-                    <div className="student-cell">
-                      <div className="student-avatar">
-                        {cred.student.charAt(0)}
-                      </div>
-                      <div>
-                        <div>{cred.student}</div>
-                        <small className="wallet-small">{cred.wallet}</small>
-                      </div>
-                    </div>
-                  </td>
-                  <td>{cred.type}</td>
-                  <td>{cred.course}</td>
-                  <td>{cred.date}</td>
-                  <td>
-                    <span className={`badge badge-${cred.status === 'active' ? 'success' : cred.status === 'revoked' ? 'danger' : 'warning'}`}>
-                      {cred.status}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="verification-count">{cred.verifications}</span>
-                  </td>
-                  <td>
-                    <div className="action-buttons">
-                      <button className="action-btn" title="View">
-                        <HiOutlineEye />
-                      </button>
-                      <button className="action-btn danger" title="Revoke">
-                        <HiOutlineTrash />
-                      </button>
-                      <button className="action-btn" title="More">
-                        <HiOutlineDotsVertical />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          
-          {filteredCredentials.length === 0 && (
-            <div className="empty-state">
-              <div className="empty-state-icon">📄</div>
-              <h3>No credentials found</h3>
-              <p>Try adjusting your search or filter criteria</p>
-            </div>
-          )}
-        </div>
-
-        {/* Pagination */}
-        <div className="pagination">
-          <span className="pagination-info">Showing 1-8 of 156 credentials</span>
-          <div className="pagination-buttons">
-            <button className="pagination-btn" disabled>Previous</button>
-            <button className="pagination-btn active">1</button>
-            <button className="pagination-btn">2</button>
-            <button className="pagination-btn">3</button>
-            <span>...</span>
-            <button className="pagination-btn">20</button>
-            <button className="pagination-btn">Next</button>
+        {/* Loading State */}
+        {loading ? (
+          <div className="loading-state">
+            <div className="loading-spinner"></div>
+            <p>Loading credentials...</p>
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Credentials Table */}
+            <div className="table-container">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Token ID</th>
+                    <th>Student</th>
+                    <th>Type</th>
+                    <th>Course</th>
+                    <th>Grade</th>
+                    <th>Issue Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCredentials.map((cred) => (
+                    <tr key={cred.tokenId}>
+                      <td>
+                        <code className="hash-code">#{cred.tokenId}</code>
+                      </td>
+                      <td>
+                        <div className="student-cell">
+                          <div className="student-avatar">
+                            {cred.studentName?.charAt(0) || '?'}
+                          </div>
+                          <div>
+                            <div>{cred.studentName}</div>
+                            <small className="wallet-small">{cred.studentEmail}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{cred.credentialType}</td>
+                      <td>{cred.courseName}</td>
+                      <td>{cred.grade || '—'}</td>
+                      <td>{cred.issueDate ? new Date(cred.issueDate).toLocaleDateString() : '—'}</td>
+                      <td>
+                        <span className={`badge badge-${cred.status === 'active' ? 'success' : cred.status === 'revoked' ? 'danger' : 'warning'}`}>
+                          {cred.status}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="action-buttons">
+                          <button className="action-btn" title="View">
+                            <HiOutlineEye />
+                          </button>
+                          {cred.status === 'active' && (
+                            <button 
+                              className="action-btn warning" 
+                              title="Revoke"
+                              onClick={() => handleRevoke(cred.tokenId)}
+                            >
+                              <HiOutlineTrash />
+                            </button>
+                          )}
+                          <button 
+                            className="action-btn danger" 
+                            title="Delete"
+                            onClick={() => handleDelete(cred.tokenId)}
+                          >
+                            <HiOutlineDotsVertical />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              
+              {filteredCredentials.length === 0 && (
+                <div className="empty-state">
+                  <div className="empty-state-icon">📄</div>
+                  <h3>No credentials found</h3>
+                  <p>{credentials.length === 0 ? 'Start by issuing your first credential' : 'Try adjusting your search or filter criteria'}</p>
+                  {credentials.length === 0 && (
+                    <Link to="/institution/issue" className="btn btn-primary" style={{ marginTop: '16px' }}>
+                      Issue First Credential
+                    </Link>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Pagination */}
+            {filteredCredentials.length > 0 && (
+              <div className="pagination">
+                <span className="pagination-info">Showing {filteredCredentials.length} of {credentials.length} credentials</span>
+              </div>
+            )}
+          </>
+        )}
       </main>
     </div>
   );

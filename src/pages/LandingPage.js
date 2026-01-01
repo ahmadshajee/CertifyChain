@@ -42,12 +42,7 @@ const LandingPage = () => {
     }
   ];
 
-  const stats = [
-    { value: '10K+', label: 'Credentials Issued' },
-    { value: '500+', label: 'Institutions' },
-    { value: '50K+', label: 'Verifications' },
-    { value: '99.9%', label: 'Uptime' }
-  ];
+
 
   const steps = [
     {
@@ -108,9 +103,9 @@ const LandingPage = () => {
             </h1>
             
             <p className="hero-description">
-              AccredChain revolutionizes credential verification with blockchain technology. 
-              Issue tamper-proof certificates, empower students with ownership, 
-              and enable instant verification for employers worldwide.
+              AccredChain is a research project exploring blockchain technology for credential verification. 
+              Our mission is to create tamper-proof certificates, empower students with ownership, 
+              and enable instant verification for employers.
             </p>
             
             <div className="hero-actions">
@@ -130,15 +125,6 @@ const LandingPage = () => {
               </Link>
             </div>
 
-            <div className="hero-trust">
-              <span>Trusted by leading institutions</span>
-              <div className="trust-logos">
-                <div className="trust-logo">IIT</div>
-                <div className="trust-logo">NIT</div>
-                <div className="trust-logo">BITS</div>
-                <div className="trust-logo">VIT</div>
-              </div>
-            </div>
           </div>
 
           <div className="hero-visual">
@@ -178,20 +164,6 @@ const LandingPage = () => {
               <div className="floating-icon icon-2"><SiIpfs /></div>
               <div className="floating-icon icon-3"><HiOutlineShieldCheck /></div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="stats-section">
-        <div className="container">
-          <div className="stats-grid-home">
-            {stats.map((stat, index) => (
-              <div key={index} className="stat-item">
-                <h3 className="stat-value text-gradient">{stat.value}</h3>
-                <p className="stat-label">{stat.label}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -269,7 +241,7 @@ const LandingPage = () => {
           <div className="cta-card">
             <div className="cta-content">
               <h2>Ready to Transform Credential Verification?</h2>
-              <p>Join thousands of institutions already using blockchain for secure credential management.</p>
+              <p>Explore our research project on blockchain-based secure credential management.</p>
               <div className="cta-actions">
                 <Link to="/institution" className="btn btn-primary btn-lg">
                   Get Started

@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Verify signature on server
-      const result = await apiService.verifyWallet(account, signature);
+      const result = await apiService.verifyWallet(account, signature, nonce);
       if (result.success) {
         setUser(result.data.user);
         return { success: true };

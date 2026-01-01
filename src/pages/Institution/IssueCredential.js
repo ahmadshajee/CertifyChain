@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWeb3 } from '../../context/Web3Context';
 import { toast } from 'react-toastify';
@@ -17,10 +17,15 @@ import {
 import './Institution.css';
 
 const IssueCredential = () => {
+  // Test mode - bypass MetaMask requirement
+  const testMode = true;
+  
   const { isConnected, account, formatAddress } = useWeb3();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [institutionInfo, setInstitutionInfo] = useState(null);
   const [formData, setFormData] = useState({
     studentName: '',
+    studentEmail: '',
     studentWallet: '',
     credentialType: '',
     course: '',
@@ -29,6 +34,19 @@ const IssueCredential = () => {
     expiryDate: '',
     description: '',
   });
+
+  // Load institution info from localStorage
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        setInstitutionInfo(JSON.parse(user));
+      } catch (e) {
+        console.error('Error parsing user info:', e);
+      }
+    }
+  }, []);
 
   const sidebarLinks = [
     { path: '/institution', icon: <HiOutlineHome />, label: 'Dashboard' },
@@ -58,7 +76,7 @@ const IssueCredential = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.studentName || !formData.studentWallet || !formData.credentialType) {
+    if (!formData.studentName || !formData.credentialType || !formData.course) {
       toast.error('Please fill in all required fields');
       return;
     }
@@ -66,28 +84,58 @@ const IssueCredential = () => {
     setIsSubmitting(true);
     
     try {
-      // Simulate blockchain transaction
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Get institution info
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
       
-      toast.success('Credential issued successfully!');
-      setFormData({
-        studentName: '',
-        studentWallet: '',
-        credentialType: '',
-        course: '',
-        grade: '',
-        issueDate: '',
-        expiryDate: '',
-        description: '',
+      // Create credential via JSON API
+      const response = await fetch('http://localhost:5000/api/credentials-json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          institutionEmail: user.email,
+          institutionName: user.name || user.institutionName || 'Unknown Institution',
+          studentName: formData.studentName,
+          studentEmail: formData.studentEmail,
+          studentWallet: formData.studentWallet || '0x0000000000000000000000000000000000000000',
+          credentialType: formData.credentialType,
+          courseName: formData.course,
+          grade: formData.grade,
+          issueDate: formData.issueDate,
+          expiryDate: formData.expiryDate || null,
+          description: formData.description
+        })
       });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        toast.success(`Credential issued successfully! Token ID: ${data.credential.tokenId}`);
+        setFormData({
+          studentName: '',
+          studentEmail: '',
+          studentWallet: '',
+          credentialType: '',
+          course: '',
+          grade: '',
+          issueDate: '',
+          expiryDate: '',
+          description: '',
+        });
+      } else {
+        toast.error(data.message || 'Failed to issue credential');
+      }
     } catch (error) {
-      toast.error('Failed to issue credential');
+      console.error('Error issuing credential:', error);
+      toast.error('Failed to issue credential: ' + error.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (!isConnected) {
+  if (!testMode && !isConnected) {
     return (
       <div className="connect-prompt">
         <div className="connect-card">
@@ -110,8 +158,8 @@ const IssueCredential = () => {
           <div className="institution-info">
             <div className="institution-avatar">🏛️</div>
             <div>
-              <h3>Institution Portal</h3>
-              <p className="wallet-address">{formatAddress(account)}</p>
+              <h3>{institutionInfo?.name || institutionInfo?.institutionName || 'Institution Portal'}</h3>
+              <p className="wallet-address">{institutionInfo?.email || (testMode ? 'Test Mode' : formatAddress(account))}</p>
             </div>
           </div>
         </div>
@@ -163,15 +211,29 @@ const IssueCredential = () => {
                 </div>
                 
                 <div className="form-group">
-                  <label className="form-label">Student Wallet Address *</label>
+                  <label className="form-label">Student Email *</label>
+                  <input
+                    type="email"
+                    name="studentEmail"
+                    value={formData.studentEmail}
+                    onChange={handleInputChange}
+                    className="form-input"
+                    placeholder="student@example.com"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label">Student Wallet Address (Optional)</label>
                   <input
                     type="text"
                     name="studentWallet"
                     value={formData.studentWallet}
                     onChange={handleInputChange}
                     className="form-input"
-                    placeholder="0x..."
-                    required
+                    placeholder="0x... (optional for JSON storage)"
                   />
                 </div>
               </div>
@@ -324,6 +386,7 @@ const IssueCredential = () => {
             <div className="form-actions">
               <button type="button" className="btn btn-secondary" onClick={() => setFormData({
                 studentName: '',
+                studentEmail: '',
                 studentWallet: '',
                 credentialType: '',
                 course: '',

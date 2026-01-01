@@ -18,6 +18,9 @@ const StudentDashboard = () => {
   const location = useLocation();
   const { isConnected, account, formatAddress } = useWeb3();
 
+  // For testing: skip wallet requirement
+  const testMode = true;
+
   const sidebarLinks = [
     { path: '/student', icon: <HiOutlineHome />, label: 'Dashboard' },
     { path: '/student/credentials', icon: <HiOutlineCollection />, label: 'My Credentials' },
@@ -69,7 +72,7 @@ const StudentDashboard = () => {
     },
   ];
 
-  if (!isConnected) {
+  if (!isConnected && !testMode) {
     return (
       <div className="connect-prompt">
         <div className="connect-card">

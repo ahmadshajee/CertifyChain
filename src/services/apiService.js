@@ -93,8 +93,9 @@ class ApiService {
    * Get nonce for wallet authentication
    */
   async getNonce(walletAddress) {
-    return this.request(`/auth/nonce/${walletAddress}`, {
-      method: 'GET',
+    return this.request('/auth/wallet/nonce', {
+      method: 'POST',
+      body: JSON.stringify({ walletAddress }),
       includeAuth: false,
     });
   }
@@ -102,10 +103,10 @@ class ApiService {
   /**
    * Verify wallet signature
    */
-  async verifyWallet(walletAddress, signature) {
-    const result = await this.request('/auth/wallet', {
+  async verifyWallet(walletAddress, signature, nonce) {
+    const result = await this.request('/auth/wallet/verify', {
       method: 'POST',
-      body: JSON.stringify({ walletAddress, signature }),
+      body: JSON.stringify({ walletAddress, signature, nonce }),
       includeAuth: false,
     });
     if (result.success && result.data.token) {

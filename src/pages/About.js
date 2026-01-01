@@ -42,9 +42,9 @@ const About = () => {
               <span className="text-gradient"> Verification</span>
             </h1>
             <p>
-              AccredChain is a blockchain-based platform designed to eliminate credential 
+              AccredChain is a research project exploring blockchain technology to eliminate credential 
               fraud and streamline the verification process for academic institutions, 
-              students, and employers worldwide.
+              students, and employers.
             </p>
           </div>
         </div>
@@ -96,8 +96,8 @@ const About = () => {
               </div>
               <div className="visual-card">
                 <HiOutlineUsers className="visual-icon" />
-                <h3>Trusted</h3>
-                <p>By institutions & employers</p>
+                <h3>Open</h3>
+                <p>Open-source research</p>
               </div>
             </div>
           </div>
@@ -191,14 +191,14 @@ const About = () => {
         <div className="container">
           <div className="cta-box">
             <HiOutlineAcademicCap className="cta-icon" />
-            <h2>Ready to Get Started?</h2>
-            <p>Join the revolution in credential verification</p>
+            <h2>Explore Our Research</h2>
+            <p>Discover how blockchain can transform credential verification</p>
             <div className="cta-buttons">
               <Link to="/institution" className="btn btn-primary btn-lg">
-                For Institutions <HiOutlineArrowRight />
+                Try Demo <HiOutlineArrowRight />
               </Link>
-              <Link to="/verify" className="btn btn-secondary btn-lg">
-                Verify Credentials
+              <Link to="/how-it-works" className="btn btn-secondary btn-lg">
+                Learn More
               </Link>
             </div>
           </div>

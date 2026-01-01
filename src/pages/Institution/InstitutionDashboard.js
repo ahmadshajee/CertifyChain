@@ -18,6 +18,9 @@ const InstitutionDashboard = () => {
   const location = useLocation();
   const { isConnected, account, formatAddress } = useWeb3();
 
+  // For testing: skip wallet requirement
+  const testMode = true;
+
   const sidebarLinks = [
     { path: '/institution', icon: <HiOutlineHome />, label: 'Dashboard' },
     { path: '/institution/issue', icon: <HiOutlineDocumentAdd />, label: 'Issue Credential' },
@@ -39,7 +42,7 @@ const InstitutionDashboard = () => {
     { id: 5, student: 'Tom Brown', type: 'Course Completion', date: '2024-01-11', status: 'active' },
   ];
 
-  if (!isConnected) {
+  if (!isConnected && !testMode) {
     return (
       <div className="connect-prompt">
         <div className="connect-card">

@@ -6,10 +6,16 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 
-// Import routes
-const authRoutes = require('./routes/auth.routes');
+// Storage mode: 'json' or 'mongodb'
+const STORAGE_MODE = process.env.STORAGE_MODE || 'json';
+
+// Import routes based on storage mode
+const authRoutes = STORAGE_MODE === 'json' 
+  ? require('./routes/auth.json.routes')
+  : require('./routes/auth.routes');
 const institutionRoutes = require('./routes/institution.routes');
 const credentialRoutes = require('./routes/credential.routes');
+const credentialJsonRoutes = require('./routes/credential.json.routes');
 const verificationRoutes = require('./routes/verification.routes');
 
 // Import middleware
@@ -59,6 +65,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/institutions', institutionRoutes);
 app.use('/api/credentials', credentialRoutes);
+app.use('/api/credentials-json', credentialJsonRoutes);
 app.use('/api/verify', verificationRoutes);
 
 // 404 handler
@@ -74,6 +81,11 @@ app.use(errorHandler);
 
 // Database connection
 const connectDB = async () => {
+  if (STORAGE_MODE === 'json') {
+    logger.info('Using JSON file storage for authentication');
+    return; // Skip MongoDB connection
+  }
+  
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/AccredChain');
     logger.info(`MongoDB Connected: ${conn.connection.host}`);
