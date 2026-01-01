@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FiMail, FiLock, FiUser, FiAlertCircle, FiCheckCircle, FiEye, FiEyeOff } from 'react-icons/fi';
-import { FaEthereum, FaGraduationCap, FaUniversity } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { FiMail, FiLock, FiAlertCircle, FiCheckCircle, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FaEthereum, FaGraduationCap } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import { useWeb3 } from '../../context/Web3Context';
 import './Auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { login, loginWithWallet, loading, error } = useAuth();
   const { account, connectWallet, isConnecting, formatAddress } = useWeb3();
   
-  // Get role from URL params (student or institution)
-  const searchParams = new URLSearchParams(location.search);
-  const roleFromUrl = searchParams.get('role') || 'student';
-  
-  const [role, setRole] = useState(roleFromUrl);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -45,9 +39,14 @@ const Login = () => {
     const result = await login(formData.email, formData.password);
     
     if (result.success) {
+      // Get the user data from localStorage to determine role
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      const userRole = userData.role || 'student';
+      
       setSuccessMessage('Login successful! Redirecting...');
       setTimeout(() => {
-        navigate(role === 'institution' ? '/institution' : '/student');
+        // Redirect based on user's actual role from database
+        navigate(userRole === 'institution' ? '/institution' : '/student');
       }, 1500);
     } else {
       setFormError(result.error || 'Login failed. Please try again.');
@@ -63,9 +62,13 @@ const Login = () => {
     const result = await loginWithWallet();
     
     if (result.success) {
+      // Get the user data from localStorage to determine role
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      const userRole = userData.role || 'student';
+      
       setSuccessMessage('Wallet authentication successful! Redirecting...');
       setTimeout(() => {
-        navigate(role === 'institution' ? '/institution' : '/student');
+        navigate(userRole === 'institution' ? '/institution' : '/student');
       }, 1500);
     } else {
       setFormError(result.error || 'Wallet authentication failed.');
@@ -80,25 +83,7 @@ const Login = () => {
           <div className="auth-form-wrapper">
             <div className="auth-header">
               <h1>Welcome Back</h1>
-              <p>Sign in to access your {role === 'institution' ? 'institution' : 'student'} dashboard</p>
-            </div>
-
-            {/* Role Selector */}
-            <div className="role-selector">
-              <button
-                className={`role-btn ${role === 'student' ? 'active' : ''}`}
-                onClick={() => setRole('student')}
-              >
-                <FaGraduationCap />
-                <span>Student</span>
-              </button>
-              <button
-                className={`role-btn ${role === 'institution' ? 'active' : ''}`}
-                onClick={() => setRole('institution')}
-              >
-                <FaUniversity />
-                <span>Institution</span>
-              </button>
+              <p>Sign in to access your dashboard</p>
             </div>
 
             {/* Success Message */}
@@ -197,7 +182,7 @@ const Login = () => {
             {/* Register Link */}
             <p className="auth-switch">
               Don't have an account?{' '}
-              <Link to={`/register?role=${role}`}>Create one</Link>
+              <Link to="/register">Create one</Link>
             </p>
           </div>
         </div>
@@ -206,50 +191,26 @@ const Login = () => {
         <div className="auth-visual-section">
           <div className="auth-visual-content">
             <div className="auth-visual-icon">
-              {role === 'institution' ? <FaUniversity /> : <FaGraduationCap />}
+              <FaGraduationCap />
             </div>
-            <h2>
-              {role === 'institution' 
-                ? 'Institution Portal' 
-                : 'Student Portal'}
-            </h2>
+            <h2>AccredChain Portal</h2>
             <p>
-              {role === 'institution'
-                ? 'Issue and manage blockchain-verified credentials for your students. Join the future of academic verification.'
-                : 'Access and share your blockchain-verified academic credentials securely. Your achievements, verified forever.'}
+              Access your blockchain-verified academic credentials securely. 
+              Your role will be automatically detected from your account.
             </p>
             <div className="auth-visual-features">
-              {role === 'institution' ? (
-                <>
-                  <div className="visual-feature">
-                    <FiCheckCircle />
-                    <span>Issue tamper-proof credentials</span>
-                  </div>
-                  <div className="visual-feature">
-                    <FiCheckCircle />
-                    <span>Manage student records</span>
-                  </div>
-                  <div className="visual-feature">
-                    <FiCheckCircle />
-                    <span>Track verification requests</span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="visual-feature">
-                    <FiCheckCircle />
-                    <span>View all your credentials</span>
-                  </div>
-                  <div className="visual-feature">
-                    <FiCheckCircle />
-                    <span>Share securely with employers</span>
-                  </div>
-                  <div className="visual-feature">
-                    <FiCheckCircle />
-                    <span>Instant verification via QR</span>
-                  </div>
-                </>
-              )}
+              <div className="visual-feature">
+                <FiCheckCircle />
+                <span>Secure blockchain verification</span>
+              </div>
+              <div className="visual-feature">
+                <FiCheckCircle />
+                <span>Instant credential access</span>
+              </div>
+              <div className="visual-feature">
+                <FiCheckCircle />
+                <span>Role-based dashboard</span>
+              </div>
             </div>
           </div>
           <div className="auth-visual-bg">

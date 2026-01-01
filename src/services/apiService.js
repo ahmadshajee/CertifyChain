@@ -85,6 +85,10 @@ class ApiService {
     });
     if (result.success && result.data.token) {
       this.setToken(result.data.token);
+      // Store user data including role in localStorage
+      if (result.data.user) {
+        localStorage.setItem('user', JSON.stringify(result.data.user));
+      }
     }
     return result;
   }
@@ -111,6 +115,10 @@ class ApiService {
     });
     if (result.success && result.data.token) {
       this.setToken(result.data.token);
+      // Store user data including role in localStorage
+      if (result.data.user) {
+        localStorage.setItem('user', JSON.stringify(result.data.user));
+      }
     }
     return result;
   }
